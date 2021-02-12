@@ -5,13 +5,13 @@ const koreFile = createKoreFile({
   adaptor: createGitHubAdaptor({
     owner: "iandjx",
     repo: "programmatic-commit",
-    ref: "heads/master",
+    ref: "heads/main",
     token: process.env.GH_TOKEN,
   }),
 });
 (async () => {
   // file path should be relative
-  const testFilePath = "file.test";
+  const testFilePath = "file/foo";
   // write
   await koreFile.writeFile(testFilePath, "hello");
   // read
