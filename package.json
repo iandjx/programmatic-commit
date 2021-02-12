@@ -1,0 +1,15 @@
+{
+  "name": "programmatic-commit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/iandjx/programmatic-commit.git",
+  "author": "Ian de Jesus <ian@eskwelabs.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "korefile": "^2.1.0"
+  }
+}
