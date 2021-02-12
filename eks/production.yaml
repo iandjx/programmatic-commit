@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: eskwelabs-web
-          image: 839343020172.dkr.ecr.ap-southeast-1.amazonaws.com/eskwelabs-web:d86fcdeb-0835-4050-a86d-4011dba4bc41
+          image: 839343020172.dkr.ecr.ap-southeast-1.amazonaws.com/eskwelabs-web:9aa76b38-6873-45f8-a7e0-7c23cc555849
           imagePullPolicy: Always
           env:
             - name: NEXT_PUBLIC_SIGN_UP_HOST
