@@ -1,1 +1,97 @@
-eylo;
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eskwelabs-api
+  labels:
+    app: eskwelabs-api
+    env: production
+  namespace: production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eskwelabs-api
+      env: production
+  template:
+    metadata:
+      labels:
+        app: eskwelabs-api
+        env: production
+    spec:
+      containers:
+      - name: eskwelabs-api
+        image: 839343020172.dkr.ecr.ap-southeast-1.amazonaws.com/eskwelabs/api@1.22.32
+        imagePullPolicy: Always
+        env:
+        - name: PORT
+          value: "8080"
+        - name: NODE_ENV
+          value: production
+        - name: DOTENV_PATH
+          value: "/mnt/secrets/production.env"
+        volumeMounts:
+        - name: env
+          mountPath: "/mnt/secrets/"
+      volumes:
+      - name: env
+        secret:
+          secretName: eskwelabs-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eskwelabs-worker
+  labels:
+    app: eskwelabs-worker
+    env: production
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: eskwelabs-worker
+      env: production
+  template:
+    metadata:
+      labels:
+        app: eskwelabs-worker
+        env: production
+    spec:
+      containers:
+      - name: eskwelabs-worker
+        image: 839343020172.dkr.ecr.ap-southeast-1.amazonaws.com/eskwelabs/api@1.22.32
+        imagePullPolicy: Always
+        command: ['node', "/opt/eskwelabs/dist/workers/queueWorker.js"]
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: DOTENV_PATH
+          value: "/mnt/secrets/production.env"
+        volumeMounts:
+        - name: env
+          mountPath: "/mnt/secrets/"
+      volumes:
+      - name: env
+        secret:
+          secretName: eskwelabs-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eskwelabs-api-lb
+  namespace: production
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:ap-southeast-1:839343020172:certificate/8ea35822-f6f1-454b-8050-439949e2a67b
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  ports:
+  - name: https
+    port: 443
+    targetPort: 8080
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: eskwelabs-api
+    env: production
+  type: LoadBalancer
