@@ -16,7 +16,7 @@ steps:
       repo: eskwelabs-web
       registry: 839343020172.dkr.ecr.ap-southeast-1.amazonaws.com
       region: ap-southeast-1
-      tags: [latest, 7608eee6-cd43-4fc4-bc49-4188d65de0e3]
+      tags: [latest, c4ebb2cb-e684-439c-8ca4-cca59e7a81fc]
       privileged: true
   - name: deploy
     image: tuttinator/kubectl
